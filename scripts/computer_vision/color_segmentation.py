@@ -39,48 +39,67 @@ def cd_color_segmentation(img, template=None, img_path=None):
 				(x1, y1) is the top left of the bbox and (x2, y2) is the bottom right of the bbox
 	"""
 	########## YOUR CODE STARTS HERE ##########
-	#img = cv2.imread("test_images_cone/test1.jpg")
-	img_name = img_path.split("/")[-1]
-	img_bb_name = os.path.join("test_images_cone_bb", img_name)
 
-
+	# set default for bounding box
 	bounding_box = ((0,0),(0,0))
+
+	# get rgb and hsv
 	img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 	img_hsv = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2HSV)
 
+
+	# ## IMPLEMENTATION 1: with contours ##
+	# light_orange = (1, 20, 20)
+	# dark_orange = (15, 255, 255)
+
+	# mask = cv2.inRange(img_hsv, light_orange, dark_orange)
+	# result = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
+
+	# erode_kernel = np.ones((3,3), 'uint8')
+	# result = cv2.erode(result, erode_kernel, iterations=3)
+
+	# dilate_kernel = np.ones((3,3), 'uint8')
+	# result = cv2.dilate(result, dilate_kernel, iterations=1)
+	
+	# im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	# im_gray = cv2.bitwise_and(im_gray, im_gray, mask=mask)
+	# _, contours, _ = cv2.findContours(im_gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	# largest_contour = max(contours, key=cv2.contourArea)
+	# min_x, min_y, width, height = cv2.boundingRect(largest_contour) #x_min, y_min, width, height
+
+	# bounding_box = ((min_x, min_y), (min_x+width, min_y+height))
+	# ######
+
+
+	## IMPLEMENTATION 2: without contours ##	
 	light_orange = (1, 190, 200)
 	dark_orange = (25, 255, 255)
 
 	mask = cv2.inRange(img_hsv, light_orange, dark_orange)
 
-
 	result = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
+	result= cv2.GaussianBlur(result, (7,7), 0)
 
-	result= cv2.GaussianBlur(result, (7,7), 0) #helps with getting bottom edges of the cone
 	erode_kernel = np.ones((7,7), 'uint8')
 	result = cv2.erode(result, erode_kernel)
 
 	dilate_kernel = np.ones((9,9), 'uint8')
 	result = cv2.dilate(result, dilate_kernel, iterations=1)
-	
-	## WIP with contours: may remove later ##
-	# color_cone_x, color_cone_y, _ = np.nonzero(result)
-	# color_bounding_box = ((np.min(color_coney), np.min(color_cone_x)), (np.max(color_cone_y), np.max(color_cone_x))) #np.max(cone_y)))
-	# img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
-	# im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	# ret, thresh = cv2.threshold(im_gray, 127, 255, 0)
-	# contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-	# kernel = np.ones((5,5), 'uint8')
-	# erode_img = cv2.erode(img_gray)
 
 	color_cone_x, color_cone_y, _ = np.nonzero(result)
 	bounding_box = ((np.min(color_cone_y), np.min(color_cone_x)), (np.max(color_cone_y), np.max(color_cone_x)))
-	img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
-	print("bounding_box:", bounding_box)
+	######
 
-	plt.imshow(img_bb) #, bounding_box[0], bounding_box[1])
-	plt.savefig(img_bb_name)
-	# plt.show(result)
+
+	# for debugging: code to write test images with red bounding boxes into directory: 
+	if img_path != None:
+		img_name = img_path.split("/")[-1]
+		img_bb_name = os.path.join("test_images_cone_bb_impl_1", img_name)
+
+		img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
+		plt.imshow(img_bb) #, bounding_box[0], bounding_box[1])
+		plt.savefig(img_bb_name)
+
 
 	########### YOUR CODE ENDS HERE ###########
 

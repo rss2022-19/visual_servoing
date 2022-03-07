@@ -52,29 +52,35 @@ def cd_color_segmentation(img, template=None, img_path=None):
 	dark_orange = (25, 255, 255)
 
 	mask = cv2.inRange(img_hsv, light_orange, dark_orange)
+
+
 	result = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
 
 	result= cv2.GaussianBlur(result, (7,7), 0) #helps with getting bottom edges of the cone
+	erode_kernel = np.ones((7,7), 'uint8')
+	result = cv2.erode(result, erode_kernel)
 
-	## IN PROGRESS: TRYING TO WORK WITH CONTOURS ##
+	dilate_kernel = np.ones((9,9), 'uint8')
+	result = cv2.dilate(result, dilate_kernel, iterations=1)
+	
+	## WIP with contours: may remove later ##
 	# color_cone_x, color_cone_y, _ = np.nonzero(result)
 	# color_bounding_box = ((np.min(color_coney), np.min(color_cone_x)), (np.max(color_cone_y), np.max(color_cone_x))) #np.max(cone_y)))
-
 	# img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
-
 	# im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	# ret, thresh = cv2.threshold(im_gray, 127, 255, 0)
 	# contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
+	# kernel = np.ones((5,5), 'uint8')
+	# erode_img = cv2.erode(img_gray)
 
 	color_cone_x, color_cone_y, _ = np.nonzero(result)
 	bounding_box = ((np.min(color_cone_y), np.min(color_cone_x)), (np.max(color_cone_y), np.max(color_cone_x)))
 	img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
-
+	print("bounding_box:", bounding_box)
 
 	plt.imshow(img_bb) #, bounding_box[0], bounding_box[1])
 	plt.savefig(img_bb_name)
-	plt.show(result)
+	# plt.show(result)
 
 	########### YOUR CODE ENDS HERE ###########
 

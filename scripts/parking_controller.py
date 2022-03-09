@@ -21,8 +21,8 @@ class ParkingController():
         self.drive_pub = rospy.Publisher(DRIVE_TOPIC,AckermannDriveStamped, queue_size=10)
         self.error_pub = rospy.Publisher("/parking_error",ParkingError, queue_size=10)
 
-        self.parking_distance = .75 # meters; try playing with this number!
-        self.max_velocity = 0.5
+        self.parking_distance = rospy.get_param("parking_distance", 0.75) # meters; try playing with this number!
+        self.max_velocity = rospy.get_param("max_velocity", 0.5)
         self.max_steering_angle = 0.34
         self.relative_x = 0
         self.relative_y = 0

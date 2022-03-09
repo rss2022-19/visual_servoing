@@ -20,10 +20,16 @@ from visual_servoing.msg import ConeLocation, ConeLocationPixel
 
 ######################################################
 ## DUMMY POINTS -- ENTER YOUR MEASUREMENTS HERE
-PTS_IMAGE_PLANE = [[172.0, 210.0],
-                   [263.0, 230.0],
-                   [408.0, 274.0],
-                   [459.0, 223.0]] # dummy points
+# PTS_IMAGE_PLANE = [[172.0, 210.0],
+#                    [263.0, 230.0],
+#                    [408.0, 274.0],
+#                    [459.0, 223.0]] # dummy points
+
+PTS_IMAGE_PLANE = [[173.0, 208.0],
+                   [246.0, 186.0],
+                   [371.0, 246.0],
+                   [430.0, 202.0]] # dummy points
+
 ######################################################
 
 # PTS_GROUND_PLANE units are in inches
@@ -31,10 +37,15 @@ PTS_IMAGE_PLANE = [[172.0, 210.0],
 
 ######################################################
 ## DUMMY POINTS -- ENTER YOUR MEASUREMENTS HERE
-PTS_GROUND_PLANE = [[1/.0254, 0.61/.0254],
-                    [.79/.0254, .26/.0254],
-                    [.54/.0254, -.04/.0254],
-                    [1/.0254, -.26/.0254]] # dummy points
+# PTS_GROUND_PLANE = [[1/.0254, 0.61/.0254],
+#                     [.79/.0254, .26/.0254],
+#                     [.54/.0254, -.04/.0254],
+#                     [1/.0254, -.26/.0254]] # dummy points
+
+PTS_GROUND_PLANE = [[48.0, 25.0],
+                    [69.5, 21.0],
+                    [28.5, 0],
+                    [50.5, -11.0]] # dummy points                    
 ######################################################
 
 METERS_PER_INCH = 0.0254

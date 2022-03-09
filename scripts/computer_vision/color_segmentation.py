@@ -87,18 +87,22 @@ def cd_color_segmentation(img, template=None, img_path=None):
 	result = cv2.dilate(result, dilate_kernel, iterations=1)
 
 	color_cone_x, color_cone_y, _ = np.nonzero(result)
+	
+	if len(color_cone_x) == 0 or len(color_cone_y) == 0:
+		return bounding_box
+	
 	bounding_box = ((np.min(color_cone_y), np.min(color_cone_x)), (np.max(color_cone_y), np.max(color_cone_x)))
 	######
 
 
 	# for debugging: code to write test images with red bounding boxes into directory: 
-	if img_path != None:
-		img_name = img_path.split("/")[-1]
-		img_bb_name = os.path.join("test_images_cone_bb_impl_1", img_name)
-
-		img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
-		plt.imshow(img_bb) #, bounding_box[0], bounding_box[1])
-		plt.savefig(img_bb_name)
+	#if img_path != None:
+	#	img_name = img_path.split("/")[-1]
+	#	img_bb_name = os.path.join("test_images_cone_bb_impl_1", img_name)
+#
+#		img_bb = cv2.rectangle(img_rgb, bounding_box[0], bounding_box[1], (255,0,0), 2)
+#		plt.imshow(img_bb) #, bounding_box[0], bounding_box[1])
+#		plt.savefig(img_bb_name)
 
 
 	########### YOUR CODE ENDS HERE ###########

@@ -54,7 +54,6 @@ def cd_sift_ransac(img, template):
 	for m,n in matches:
 		if m.distance < 0.75*n.distance:
 			good.append(m)
-
 	# If enough good matches, find bounding box
 	if len(good) > MIN_MATCH:
 		src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
@@ -69,7 +68,23 @@ def cd_sift_ransac(img, template):
 
 		########## YOUR CODE STARTS HERE ##########
 
-		x_min = y_min = x_max = y_max = 0
+		if False:
+			img3 = cv2.drawMatches(template, kp1, img, kp2, good[:50], img) #, flags=2)
+			image_print(img3)
+
+		#Fix array pts to have 3rd dimension filled with ones
+		pts = np.array([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ])
+		i, j = pts.shape
+		pts = np.hstack((pts,np.ones((i,1))))
+
+		#Apply the transformation Matrix to the points
+		pts2 = np.matmul(M,pts.T).T
+
+		#Set #_mins and #_maxes
+		x_min = min(pts2[:,0])
+		y_min = min(pts2[:,1])
+		x_max = max(pts2[:,0])
+		y_max = max(pts2[:,1])
 
 		########### YOUR CODE ENDS HERE ###########
 
@@ -103,6 +118,8 @@ def cd_template_matching(img, template):
 	# Keep track of best-fit match
 	best_match = None
 
+	#image_print(template)
+
 	# Loop over different scales of image
 	for scale in np.linspace(1.5, .5, 50):
 		# Resize the image
@@ -116,9 +133,44 @@ def cd_template_matching(img, template):
 		# Use OpenCV template matching functions to find the best match
 		# across template scales.
 
+		method = "cv2.TM_CCOEFF_NORMED"
+		is_sq = 0
+		if "Q" in method:
+			is_sq = 1
+		alter = (1,-1)[is_sq]
+		if "bounding_box" not in locals():
+			bounding_box = ((0,0),(0,0))
+		if "old_val" not in locals():
+			if is_sq:
+				old_val = 10**100
+			else:
+				old_val = 0
+
+		res = cv2.matchTemplate(img_canny, resized_template, eval(method))
+		min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+		if is_sq:
+			val = min_val
+			loc = min_loc
+		else:
+			val = max_val
+			loc = max_loc
+
+		if val > alter*old_val:
+			bounding_box = ((loc[0],loc[1]),
+					(int(loc[0]+w*scale), int(loc[1]+h*scale)))
+			old_val = val
+
+		if False:
+			print("Starting Report at scale "+str(scale)+" : ")
+			print("min_loc", min_loc)
+			print("max_loc", max_loc)
+			print(bounding_box)
 		# Remember to resize the bounding box using the highest scoring scale
 		# x1,y1 pixel will be accurate, but x2,y2 needs to be correctly scaled
-		bounding_box = ((0,0),(0,0))
 		########### YOUR CODE ENDS HERE ###########
-
+	print(bounding_box)
+	print(old_val)
+	#cv2.rectangle(img_canny,bounding_box[0], bounding_box[1], 255, 2)
+	#image_print(img_canny)
 	return bounding_box

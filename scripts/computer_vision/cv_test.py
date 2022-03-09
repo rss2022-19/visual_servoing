@@ -8,16 +8,20 @@ from color_segmentation import cd_color_segmentation
 
 # File paths
 cone_csv_path = "./test_images_cone/test_images_cone.csv"
+robot_csv_path = "./test_images_robot/test_robot.csv"
 citgo_csv_path = "./test_images_citgo/test_citgo.csv"
 localization_csv_path="./test_images_localization/test_localization.csv"
 
 cone_template_path = './test_images_cone/cone_template.png'
+robot_template_path = './test_images_robot/robot_template.png'
 citgo_template_path = './test_images_citgo/citgo_template.png'
 localization_template_path='./test_images_localization/basement_fixed.png'
 
 cone_score_path = './scores/test_scores_cone.csv'
 citgo_score_path = './scores/test_scores_citgo.csv'
 localization_score_path = './scores/test_scores_map.csv'
+robot_score_path = './scores/test_scores_robot.csv'
+
 
 def iou_score(bbox1, bbox2):
     """
@@ -145,7 +149,10 @@ if __name__ == '__main__':
               localization_template_path, localization_score_path, swap=True)         
         elif arg == "citgo":
           scores = test_all_algorithms(citgo_csv_path,
-              citgo_template_path, citgo_score_path)         
+              citgo_template_path, citgo_score_path)
+        elif arg == "robot":
+          scores = test_all_algorithms(robot_csv_path,
+              robot_template_path, robot_score_path)
         else:
             print "Argument not recognized"
 
@@ -156,10 +163,10 @@ if __name__ == '__main__':
                             "template":cd_template_matching})
         data_dict = dict({"cone":(cone_csv_path, cone_template_path),
             "map":(localization_csv_path, localization_template_path),
-            "citgo":(citgo_csv_path, citgo_template_path)})
+            "citgo":(citgo_csv_path, citgo_template_path),"robot":(robot_csv_path, robot_template_path)})
         swap = False
         args = sys.argv[1:3]
-        if args[0] in {"cone", "map", "citgo"} and args[1] in {"color", "template", "sift"}:
+        if args[0] in {"cone", "map", "citgo","robot"} and args[1] in {"color", "template", "sift","robot"}:
             if args[0] == "map":
                 swap = True
             scores = test_algorithm(algo_dict[args[1]],data_dict[args[0]][0],data_dict[args[0]][1], swap=swap)

@@ -43,9 +43,11 @@ class ConeDetector():
         # pixel location in the image.
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         #################################
-
+    
         image = self.bridge.imgmsg_to_cv2(image_msg, "bgr8")
-        
+        #image = image[240:290,:, :]
+        image[:240,:,:] = 0
+        image[290:,:,:] = 0
         bounding_box = cd_color_segmentation(image)
         
         c = ConeLocationPixel()

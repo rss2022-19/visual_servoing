@@ -49,25 +49,25 @@ def cd_color_segmentation(img, template=None, img_path=None):
 
 
 	# ## IMPLEMENTATION 1: with contours ##
-	# light_orange = (1, 20, 20)
-	# dark_orange = (15, 255, 255)
+	#light_orange = (1, 20, 20)
+	#dark_orange = (15, 255, 255)
 
-	# mask = cv2.inRange(img_hsv, light_orange, dark_orange)
-	# result = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
+	#mask = cv2.inRange(img_hsv, light_orange, dark_orange)
+	#result = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
 
-	# erode_kernel = np.ones((3,3), 'uint8')
-	# result = cv2.erode(result, erode_kernel, iterations=3)
+	#erode_kernel = np.ones((3,3), 'uint8')
+	#result = cv2.erode(result, erode_kernel, iterations=3)
 
-	# dilate_kernel = np.ones((3,3), 'uint8')
-	# result = cv2.dilate(result, dilate_kernel, iterations=1)
+	#dilate_kernel = np.ones((3,3), 'uint8')
+	#result = cv2.dilate(result, dilate_kernel, iterations=1)
 	
-	# im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	# im_gray = cv2.bitwise_and(im_gray, im_gray, mask=mask)
-	# _, contours, _ = cv2.findContours(im_gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-	# largest_contour = max(contours, key=cv2.contourArea)
-	# min_x, min_y, width, height = cv2.boundingRect(largest_contour) #x_min, y_min, width, height
+        #im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	#im_gray = cv2.bitwise_and(im_gray, im_gray, mask=mask)
+	#_, contours, _ = cv2.findContours(im_gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	#largest_contour = max(contours, key=cv2.contourArea)
+	#min_x, min_y, width, height = cv2.boundingRect(largest_contour) #x_min, y_min, width, height
 
-	# bounding_box = ((min_x, min_y), (min_x+width, min_y+height))
+	#bounding_box = ((min_x, min_y), (min_x+width, min_y+height))
 	# ######
 
 

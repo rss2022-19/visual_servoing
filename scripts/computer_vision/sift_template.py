@@ -54,6 +54,7 @@ def cd_sift_ransac(img, template):
 	for m,n in matches:
 		if m.distance < 0.75*n.distance:
 			good.append(m)
+
 	# If enough good matches, find bounding box
 	if len(good) > MIN_MATCH:
 		src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
@@ -158,7 +159,7 @@ def cd_template_matching(img, template):
 
 		if val > alter*old_val:
 			bounding_box = ((loc[0],loc[1]),
-					(int(loc[0]+w*scale), int(loc[1]+h*scale)))
+					(int(loc[0]+w/scale), int(loc[1]+h/scale)))
 			old_val = val
 
 		if False:
@@ -169,8 +170,8 @@ def cd_template_matching(img, template):
 		# Remember to resize the bounding box using the highest scoring scale
 		# x1,y1 pixel will be accurate, but x2,y2 needs to be correctly scaled
 		########### YOUR CODE ENDS HERE ###########
-	print(bounding_box)
-	print(old_val)
+	#print(bounding_box)
+	#print(old_val)
 	#cv2.rectangle(img_canny,bounding_box[0], bounding_box[1], 255, 2)
 	#image_print(img_canny)
 	return bounding_box
